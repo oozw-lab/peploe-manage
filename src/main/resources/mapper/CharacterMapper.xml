@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.czjtxy.sjypeploemanage.mapper.CharacterMapper">
+
+    <resultMap id="characterMap" type="cn.edu.czjtxy.sjypeploemanage.entity.Character">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="gender" property="gender"/>
+        <result column="wisdom" property="wisdom"/>
+        <result column="force" property="force"/>
+        <result column="social" property="social"/>
+        <result column="agility" property="agility"/>
+        <result column="status" property="status"/>
+        <result column="user_id" property="userId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="selectList" resultMap="characterMap">
+        SELECT * FROM `char_info` WHERE `user_id` = #{userId} ORDER BY `id` DESC
+    </select>
+
+    <select id="selectById" resultMap="characterMap">
+        SELECT * FROM `char_info` WHERE `id` = #{id}
+    </select>
+
+    <insert id="insert" parameterType="cn.edu.czjtxy.sjypeploemanage.entity.Character" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `char_info` (`name`, `gender`, `wisdom`, `force`, `social`, `agility`, `status`, `user_id`, `create_time`, `update_time`)
+        VALUES (#{name}, #{gender}, #{wisdom}, #{force}, #{social}, #{agility}, #{status}, #{userId}, NOW(), NOW())
+    </insert>
+
+    <update id="update" parameterType="cn.edu.czjtxy.sjypeploemanage.entity.Character">
+        UPDATE `char_info`
+        <set>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="gender != null">`gender` = #{gender},</if>
+            <if test="wisdom != null">`wisdom` = #{wisdom},</if>
+            <if test="force != null">`force` = #{force},</if>
+            <if test="social != null">`social` = #{social},</if>
+            <if test="agility != null">`agility` = #{agility},</if>
+            <if test="status != null">`status` = #{status},</if>
+            `update_time` = NOW()
+        </set>
+        WHERE `id` = #{id}
+    </update>
+
+    <update id="adjust">
+        UPDATE `char_info`
+        <set>
+            <if test="wisdom != null">`wisdom` = `wisdom` + #{wisdom},</if>
+            <if test="force != null">`force` = `force` + #{force},</if>
+            <if test="social != null">`social` = `social` + #{social},</if>
+            <if test="agility != null">`agility` = `agility` + #{agility},</if>
+            `update_time` = NOW()
+        </set>
+        WHERE `id` = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM `char_info` WHERE `id` = #{id}
+    </delete>
+
+</mapper>

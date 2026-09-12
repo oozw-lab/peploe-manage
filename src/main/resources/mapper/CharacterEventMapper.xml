@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.czjtxy.sjypeploemanage.mapper.CharacterEventMapper">
+
+    <resultMap id="characterEventMap" type="cn.edu.czjtxy.sjypeploemanage.entity.CharacterEvent">
+        <id column="id" property="id"/>
+        <result column="character_id" property="characterId"/>
+        <result column="event_id" property="eventId"/>
+        <result column="complete_time" property="completeTime"/>
+    </resultMap>
+
+    <select id="selectByCharacterId" resultMap="characterEventMap">
+        SELECT * FROM `character_event` WHERE character_id = #{characterId} ORDER BY complete_time DESC
+    </select>
+
+    <select id="selectAllWithDetails" resultType="java.util.Map">
+        SELECT
+            ce.id,
+            ce.character_id AS characterId,
+            ce.event_id AS eventId,
+            ce.complete_time AS completeTime,
+            c.name AS characterName,
+            e.name AS eventName,
+            e.category AS category,
+            e.wisdom_bonus AS wisdomBonus,
+            e.force_bonus AS forceBonus,
+            e.social_bonus AS socialBonus,
+            e.agility_bonus AS agilityBonus
+        FROM `character_event` ce
+        LEFT JOIN `char_info` c ON ce.character_id = c.id
+        LEFT JOIN `event` e ON ce.event_id = e.id
+        <where>
+            <if test="characterId != null">
+                AND ce.character_id = #{characterId}
+            </if>
+        </where>
+        ORDER BY ce.complete_time DESC
+    </select>
+
+    <insert id="insert" parameterType="cn.edu.czjtxy.sjypeploemanage.entity.CharacterEvent" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `character_event` (character_id, event_id, complete_time)
+        VALUES (#{characterId}, #{eventId}, NOW())
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM `character_event` WHERE id = #{id}
+    </delete>
+
+</mapper>

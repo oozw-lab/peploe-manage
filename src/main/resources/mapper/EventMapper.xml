@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.czjtxy.sjypeploemanage.mapper.EventMapper">
+
+    <resultMap id="eventMap" type="cn.edu.czjtxy.sjypeploemanage.entity.Event">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="category" property="category"/>
+        <result column="status" property="status"/>
+        <result column="wisdom_bonus" property="wisdomBonus"/>
+        <result column="force_bonus" property="forceBonus"/>
+        <result column="social_bonus" property="socialBonus"/>
+        <result column="agility_bonus" property="agilityBonus"/>
+        <result column="character_id" property="characterId"/>
+        <result column="user_id" property="userId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="selectList" resultMap="eventMap">
+        SELECT * FROM `event` WHERE `user_id` = #{userId} ORDER BY `id` DESC
+    </select>
+
+    <select id="selectById" resultMap="eventMap">
+        SELECT * FROM `event` WHERE `id` = #{id}
+    </select>
+
+    <insert id="insert" parameterType="cn.edu.czjtxy.sjypeploemanage.entity.Event" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `event` (`name`, `description`, `category`, `status`, `wisdom_bonus`, `force_bonus`, `social_bonus`, `agility_bonus`, `character_id`, `user_id`, `create_time`, `update_time`)
+        VALUES (#{name}, #{description}, #{category}, #{status}, #{wisdomBonus}, #{forceBonus}, #{socialBonus}, #{agilityBonus}, #{characterId}, #{userId}, NOW(), NOW())
+    </insert>
+
+    <update id="update" parameterType="cn.edu.czjtxy.sjypeploemanage.entity.Event">
+        UPDATE `event`
+        <set>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="description != null">`description` = #{description},</if>
+            <if test="category != null">`category` = #{category},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="wisdomBonus != null">`wisdom_bonus` = #{wisdomBonus},</if>
+            <if test="forceBonus != null">`force_bonus` = #{forceBonus},</if>
+            <if test="socialBonus != null">`social_bonus` = #{socialBonus},</if>
+            <if test="agilityBonus != null">`agility_bonus` = #{agilityBonus},</if>
+            <if test="characterId != null">`character_id` = #{characterId},</if>
+            `update_time` = NOW()
+        </set>
+        WHERE `id` = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM `event` WHERE `id` = #{id}
+    </delete>
+
+</mapper>
